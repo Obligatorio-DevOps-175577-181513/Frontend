@@ -34,17 +34,23 @@ on:
 jobs:
   sonarcloud-analysis:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
+      - name: Verify package-lock.json presence
+        run: |
+          if [ ! -f package-lock.json ] && [ ! -f yarn.lock ]; then
+            echo "Dependencies lock file is not found"
+            exit 1
+          fi
+
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '20.x'
+          node-version: '16.x'
 
       - name: Install dependencies
         run: npm install
@@ -57,29 +63,40 @@ jobs:
 
   build:
     needs: sonarcloud-analysis
-    runs-on: ubuntu-latest        
-
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Verify package-lock.json presence
+        run: |
+          if [ ! -f package-lock.json ] && [ ! -f yarn.lock ]; then
+            echo "Dependencies lock file is not found"
+            exit 1
+          fi
+
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '20.x'
+          node-version: '16.x'
 
       - name: Install dependencies
         run: npm install
 
       - name: Build project
-        run: |
-          chmod +x ./.github/scripts/build.sh && ./.github/scripts/build.sh
+        run: ./build.sh
 
-      - name: Upload build artifacts
+      - name: Upload build artifacts for catalog
         uses: actions/upload-artifact@v2
         with:
-          name: build-artifacts
-          path: build/
+          name: build-artifacts-catalog
+          path: dist/apps/catalog/
+        
+      - name: Upload build artifacts for checkout
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-artifacts-checkout
+          path: dist/apps/checkout/
 
   deploy:
     needs: build
@@ -87,6 +104,32 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
+      - name: Download build artifacts for catalog
+        uses: actions/download-artifact@v2
+        with:
+          name: build-artifacts-catalog
+          path: dist/apps/catalog/
+        
+      - name: Download build artifacts for checkout
+        uses: actions/download-artifact@v2
+        with:
+          name: build-artifacts-checkout
+          path: dist/apps/checkout/
+
+      - name: Verify build directory presence
+        run: |
+          echo "Checking catalog directory..."
+          ls -l dist/apps
+          if [ ! -d dist/apps/catalog ]; then
+            echo "Build directory for catalog not found!"
+            exit 1
+          fi
+          echo "Checking checkout directory..."
+          if [ ! -d dist/apps/checkout ]; then
+            echo "Build directory for checkout not found!"
+            exit 1
+          fi
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -97,7 +140,6 @@ jobs:
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
 
       - name: Deploy to S3
-        run: |
-          chmod +x ./.github/scripts/deploy.sh && ./.github/scripts/deploy.sh
+        run: ./deploy.sh
         env:
           S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET }}
