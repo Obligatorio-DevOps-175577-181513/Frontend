@@ -39,7 +39,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -52,12 +52,12 @@ jobs:
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   build:
     needs: sonarcloud-analysis
-    runs-on: ubuntu-latest        
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
@@ -75,6 +75,10 @@ jobs:
         run: |
           chmod +x ./.github/scripts/build.sh
           ./.github/scripts/build.sh
+        env:
+          CI_ENV: ${{ inputs.CI_ENV }}
+          CONTENTFUL_ENVIRONMENT: ${{ inputs.CONTENTFUL_ENVIRONMENT }}
+          S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v2
@@ -95,19 +99,6 @@ jobs:
           name: build-artifacts
           path: dist/apps/
 
-      - name: Verify build directory presence
-        run: |
-          echo "Checking build directories..."
-          ls -l dist/apps
-          if [ ! -d dist/apps/catalog ]; then
-            echo "Build directory for catalog not found!"
-            exit 1
-          fi
-          if [ ! -d dist/apps/checkout ]; then
-            echo "Build directory for checkout not found!"
-            exit 1
-          fi
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -120,5 +111,6 @@ jobs:
         run: |
           chmod +x ./.github/scripts/deploy.sh
           ./.github/scripts/deploy.sh
+        shell: bash
         env:
           S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET }}
