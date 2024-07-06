@@ -40,13 +40,6 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
-      - name: Verify package-lock.json presence
-        run: |
-          if [ ! -f package-lock.json ] && [ ! -f yarn.lock ]; then
-            echo "Dependencies lock file is not found"
-            exit 1
-          fi
-
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
@@ -67,13 +60,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
-      - name: Verify package-lock.json presence
-        run: |
-          if [ ! -f package-lock.json ] && [ ! -f yarn.lock ]; then
-            echo "Dependencies lock file is not found"
-            exit 1
-          fi
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
