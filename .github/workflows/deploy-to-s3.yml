@@ -43,7 +43,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '20'
 
       - name: Install dependencies
         run: npm install
@@ -64,13 +64,14 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '20'
 
       - name: Install dependencies
         run: npm install
 
       - name: Build project
-        run: ./.github/scripts/build.sh
+        run: |
+          chmod +x ./.github/scripts/build.sh && ./.github/scripts/build.sh
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v2
@@ -100,6 +101,7 @@ jobs:
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
 
       - name: Deploy to S3
-        run: ./deploy.sh
+        run: |
+          chmod +x ./.github/scripts/deploy.sh && ./.github/scripts/deploy.sh
         env:
           S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET }}
