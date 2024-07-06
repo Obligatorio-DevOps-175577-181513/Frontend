@@ -16,6 +16,11 @@ if [ ! -d "dist/apps/checkout" ]; then
   exit 1
 fi
 
+if [ -z "$S3_ORIGIN_BUCKET" ]; then
+  echo "Error: S3_ORIGIN_BUCKET is not defined."
+  exit 1
+fi
+
 echo "Deploying catalog..."
 # Desplegar catalog
 cd dist/apps/catalog
