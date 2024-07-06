@@ -8,10 +8,12 @@ export COMMIT_DATE="$(git log --date=format:'%Y-%m-%d %H:%M:%S' --pretty="%cd" -
 #### Print Environment Variables ####
 printenv
 
+echo "Creating output directories..."
 # Crear los directorios de salida si no existen
 mkdir -p dist/apps/catalog
 mkdir -p dist/apps/checkout
 
+echo "Cleaning previous builds..."
 # Eliminar el contenido de los directorios de salida anteriores
 rm -rf ./dist/apps/catalog/*
 rm -rf ./dist/apps/checkout/*
@@ -20,5 +22,5 @@ rm -rf ./dist/apps/checkout/*
 npm run build catalog
 npm run build checkout
 
-cd ./dist/apps/catalog
-ls -la
+echo "Build complete. Listing output directories:"
+ls -l dist/apps

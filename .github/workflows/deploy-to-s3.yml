@@ -34,6 +34,7 @@ on:
 jobs:
   sonarcloud-analysis:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -43,7 +44,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
+          node-version: '20.x'
 
       - name: Install dependencies
         run: npm install
@@ -56,7 +57,8 @@ jobs:
 
   build:
     needs: sonarcloud-analysis
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest        
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -64,25 +66,21 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
+          node-version: '20.x'
 
       - name: Install dependencies
         run: npm install
 
       - name: Build project
-        run: ./build.sh
+        run: |
+          chmod +x ./.github/scripts/build.sh
+          ./.github/scripts/build.sh
 
-      - name: Upload build artifacts for catalog
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: build-artifacts-catalog
-          path: dist/apps/catalog/
-        
-      - name: Upload build artifacts for checkout
-        uses: actions/upload-artifact@v2
-        with:
-          name: build-artifacts-checkout
-          path: dist/apps/checkout/
+          name: build-artifacts
+          path: dist/apps/
 
   deploy:
     needs: build
@@ -91,27 +89,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Download build artifacts for catalog
+      - name: Download build artifacts
         uses: actions/download-artifact@v2
         with:
-          name: build-artifacts-catalog
-          path: dist/apps/catalog/
-        
-      - name: Download build artifacts for checkout
-        uses: actions/download-artifact@v2
-        with:
-          name: build-artifacts-checkout
-          path: dist/apps/checkout/
+          name: build-artifacts
+          path: dist/apps/
 
       - name: Verify build directory presence
         run: |
-          echo "Checking catalog directory..."
+          echo "Checking build directories..."
           ls -l dist/apps
           if [ ! -d dist/apps/catalog ]; then
             echo "Build directory for catalog not found!"
             exit 1
           fi
-          echo "Checking checkout directory..."
           if [ ! -d dist/apps/checkout ]; then
             echo "Build directory for checkout not found!"
             exit 1
@@ -126,6 +117,8 @@ jobs:
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
 
       - name: Deploy to S3
-        run: ./deploy.sh
+        run: |
+          chmod +x ./.github/scripts/deploy.sh
+          ./.github/scripts/deploy.sh
         env:
           S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET }}
