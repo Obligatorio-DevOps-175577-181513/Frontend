@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   build-dev:
-    uses: Obligatorio-DevOps-175577-181513/frontend/.github/workflows/deploy-to-s3.yml@branch-develop
+    uses: Obligatorio-DevOps-175577-181513/Frontend/.github/workflows/deploy-to-s3.yml@branch-develop
     with:
       CI_ENV: develop
       CONTENTFUL_ENVIRONMENT: 'develop'
