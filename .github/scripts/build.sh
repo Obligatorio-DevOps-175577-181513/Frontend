@@ -8,8 +8,14 @@ export COMMIT_DATE="$(git log --date=format:'%Y-%m-%d %H:%M:%S' --pretty="%cd" -
 #### Print Environment Variables ####
 printenv
 
-# Eliminar el directorio de salida anterior
-rm -rf ./dist/*
+# Crear los directorios de salida si no existen
+mkdir -p dist/apps/catalog
+mkdir -p dist/apps/checkout
 
-# Ejecutar el comando de construcción de Nx
-npm run build
+# Eliminar el contenido de los directorios de salida anteriores
+rm -rf ./dist/apps/catalog/*
+rm -rf ./dist/apps/checkout/*
+
+# Ejecutar los comandos de construcción de Nx
+npm run build catalog
+npm run build checkout
