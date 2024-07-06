@@ -32,4 +32,4 @@ cd ../../checkout
 aws s3 sync ./ s3://$S3_ORIGIN_BUCKET/checkout --metadata-directive 'REPLACE' --cache-control max-age=31536000,public,immutable --exclude "index.html" --exclude "assets/*"
 aws s3 sync ./ s3://$S3_ORIGIN_BUCKET/checkout --metadata-directive 'REPLACE' --cache-control no-cache,no-store,must-revalidate --include "index.html" --include "assets/*" --exclude "*"
 
-echo "Despliegue completado exitosamente."
+echo "Deploy completed successfully."
