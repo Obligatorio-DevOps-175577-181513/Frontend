@@ -4,12 +4,12 @@ set -e
 
 # Verificar que los directorios dist/apps/catalog y dist/apps/checkout existen
 if [ ! -d "dist/apps/catalog" ]; then
-  echo "Build directory for catalog not found!"
+  echo "catalog - Build directory for catalog not found!"
   exit 1
 fi
 
 if [ ! -d "dist/apps/checkout" ]; then
-  echo "Build directory for checkout not found!"
+  echo "checkout - Build directory for checkout not found!"
   exit 1
 fi
 

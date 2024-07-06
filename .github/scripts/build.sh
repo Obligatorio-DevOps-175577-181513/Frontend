@@ -17,5 +17,5 @@ rm -rf ./dist/apps/catalog/*
 rm -rf ./dist/apps/checkout/*
 
 # Ejecutar los comandos de construcción de Nx
-npm run build catalog
-npm run build checkout
+npm run build --catalog
+npm run build --checkout
