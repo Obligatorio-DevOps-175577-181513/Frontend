@@ -2,8 +2,13 @@
 
 set -e
 
-# Cambia al directorio de salida de la construcción
-cd build
+# Verificar que el directorio dist/apps/my-mfe existe
+if [ ! -d "dist/apps/my-mfe" ]; then
+  echo "Build directory not found!"
+  exit 1
+fi
+
+cd dist/apps/my-mfe
 
 # Sync bundles with strong cache
 aws s3 sync ./static/css s3://$S3_ORIGIN_BUCKET/static/css --metadata-directive 'REPLACE' --cache-control max-age=31536000,public,immutable --delete

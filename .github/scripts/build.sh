@@ -9,7 +9,7 @@ export COMMIT_DATE="$(git log --date=format:'%Y-%m-%d %H:%M:%S' --pretty="%cd" -
 printenv
 
 # Eliminar el directorio de salida anterior
-rm -rf ./build
+rm -rf ./dist/*
 
-# Ejecutar el comando de construcción de React
+# Ejecutar el comando de construcción de Nx
 npm run build
