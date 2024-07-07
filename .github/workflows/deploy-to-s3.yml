@@ -98,7 +98,7 @@ jobs:
 
       - name: Check env vars
         run: |
-          echo "S3_ORIGIN_BUCKET is set to ${S3_ORIGIN_BUCKET}"
+          echo "AWS_DEFAULT_REGION_2 is set to ${{ secrets.AWS_DEFAULT_REGION_2}}"
 
       - name: Download build artifacts
         uses: actions/download-artifact@v2
