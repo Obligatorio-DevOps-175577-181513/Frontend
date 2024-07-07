@@ -79,7 +79,7 @@ jobs:
         env:
           CI_ENV: ${{ inputs.CI_ENV }}
           CONTENTFUL_ENVIRONMENT: ${{ inputs.CONTENTFUL_ENVIRONMENT }}
-          S3_ORIGIN_BUCKET: ${{ inputs.S3_ORIGIN_BUCKET }}
+          S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v2
@@ -88,7 +88,7 @@ jobs:
           path: dist/apps/
 
       - name: Debug S3 Origin Bucket
-        run: echo "S3_ORIGIN_BUCKET is ${{ inputs.S3_ORIGIN_BUCKET }}"
+        run: echo "S3_ORIGIN_BUCKET is ${{ secrets.S3_ORIGIN_BUCKET }}"
 
   deploy:
     needs: build
@@ -116,4 +116,4 @@ jobs:
           ./.github/scripts/deploy.sh
         shell: bash
         env:
-          S3_ORIGIN_BUCKET: ${{ inputs.S3_ORIGIN_BUCKET }}
+          S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET }}
