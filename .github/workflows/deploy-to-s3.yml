@@ -22,7 +22,6 @@ on:
 
   push:
     branches:
-      - main
       - production
       - branch-staging
       - branch-develop
@@ -70,6 +69,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Check env vars
+        run: |
+          echo "S3_ORIGIN_BUCKET is set to ${S3_ORIGIN_BUCKET}"
+
       - name: Build project
         run: |
           chmod +x ./.github/scripts/build.sh &&
@@ -94,7 +97,8 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Check env vars
-        run: printenv | grep S3_ORIGIN_BUCKET
+        run: |
+          echo "S3_ORIGIN_BUCKET is set to ${S3_ORIGIN_BUCKET}"
 
       - name: Download build artifacts
         uses: actions/download-artifact@v2
