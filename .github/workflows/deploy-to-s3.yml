@@ -9,14 +9,14 @@ on:
       CONTENTFUL_ENVIRONMENT:
         required: true
         type: string
+      S3_ORIGIN_BUCKET:
+        required: true
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true
       AWS_SECRET_ACCESS_KEY:
         required: true
       AWS_DEFAULT_REGION:
-        required: true
-      S3_ORIGIN_BUCKET:
         required: true
 
   push:
@@ -77,7 +77,7 @@ jobs:
         env:
           CI_ENV: ${{ inputs.CI_ENV }}
           CONTENTFUL_ENVIRONMENT: ${{ inputs.CONTENTFUL_ENVIRONMENT }}
-          S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET }}
+          S3_ORIGIN_BUCKET: ${{ inputs.S3_ORIGIN_BUCKET }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v2
@@ -111,4 +111,4 @@ jobs:
           ./.github/scripts/deploy.sh
         shell: bash
         env:
-          S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET }}
+          S3_ORIGIN_BUCKET: ${{ inputs.S3_ORIGIN_BUCKET }}
