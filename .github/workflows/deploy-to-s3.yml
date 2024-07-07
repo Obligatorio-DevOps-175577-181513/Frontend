@@ -113,10 +113,10 @@ jobs:
       - name: Expose secrets
         run: | 
           echo "S3_ORIGIN_BUCKET is ${{ secrets.S3_ORIGIN_BUCKET }}" &&
+          echo "S3_ORIGIN_BUCKET_DEV is ${{ secrets.S3_ORIGIN_BUCKET_DEV }}" &&
           echo "AWS_ACCESS_KEY_ID is ${{ secrets.AWS_ACCESS_KEY_ID }}" &&
           echo "AWS_SECRET_ACCESS_KEY is ${{ secrets.AWS_SECRET_ACCESS_KEY }}" &&
           echo "AWS_DEFAULT_REGION is ${{ secrets.AWS_DEFAULT_REGION }}"
-
 
       - name: Deploy to S3
         run: |
