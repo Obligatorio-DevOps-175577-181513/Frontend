@@ -93,6 +93,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Check env vars
+        run: printenv | grep S3_ORIGIN_BUCKET
+
       - name: Download build artifacts
         uses: actions/download-artifact@v2
         with:
