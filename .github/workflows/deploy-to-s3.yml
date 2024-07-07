@@ -71,7 +71,7 @@ jobs:
 
       - name: Check env vars
         run: |
-          echo "S3_ORIGIN_BUCKET is set to ${S3_ORIGIN_BUCKET}"
+          echo "S3_ORIGIN_BUCKET is set to ${{ inputs.S3_ORIGIN_BUCKET }} tu vieja"
 
       - name: Build project
         run: |
