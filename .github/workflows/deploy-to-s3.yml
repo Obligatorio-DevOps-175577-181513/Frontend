@@ -12,12 +12,13 @@ on:
       S3_ORIGIN_BUCKET:
         required: true
         type: string
+      AWS_DEFAULT_REGION:
+        required: true
+        type: string
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true
       AWS_SECRET_ACCESS_KEY:
-        required: true
-      AWS_DEFAULT_REGION:
         required: true
 
   push:
@@ -82,6 +83,7 @@ jobs:
           CI_ENV: ${{ inputs.CI_ENV }}
           CONTENTFUL_ENVIRONMENT: ${{ inputs.CONTENTFUL_ENVIRONMENT }}
           S3_ORIGIN_BUCKET: ${{ inputs.S3_ORIGIN_BUCKET }}
+          AWS_DEFAULT_REGION: ${{ inputs.AWS_DEFAULT_REGION }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v2
@@ -98,7 +100,7 @@ jobs:
 
       - name: Check env vars
         run: |
-          echo "AWS_DEFAULT_REGION_2 is set to ${{ secrets.AWS_DEFAULT_REGION_2}}"
+          echo "AWS_DEFAULT_REGION is set to ${{ inputs.AWS_DEFAULT_REGION }}"
 
       - name: Download build artifacts
         uses: actions/download-artifact@v2
@@ -119,4 +121,4 @@ jobs:
           ./.github/scripts/deploy.sh
         shell: bash
         env:
-          S3_ORIGIN_BUCKET: ${{ inputs.S3_ORIGIN_BUCKET }}
+          S3_ORIGIN_BUCKET: ${{ inputs.S3_ORIGIN_BUCKET_DEV }}
