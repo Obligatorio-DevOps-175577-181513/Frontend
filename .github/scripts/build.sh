@@ -11,16 +11,14 @@ printenv
 echo "Creating output directories..."
 # Crear los directorios de salida si no existen
 mkdir -p dist/apps/catalog
-mkdir -p dist/apps/checkout
 
 echo "Cleaning previous builds..."
 # Eliminar el contenido de los directorios de salida anteriores
 rm -rf ./dist/apps/catalog/*
-rm -rf ./dist/apps/checkout/*
+
 
 # Ejecutar los comandos de construcción de Nx
 npm run build catalog
-npm run build checkout
 
 echo "Build complete. Listing output directories:"
 ls -l dist/apps

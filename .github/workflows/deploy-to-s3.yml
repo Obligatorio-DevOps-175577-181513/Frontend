@@ -16,8 +16,6 @@ on:
         required: true
       AWS_DEFAULT_REGION:
         required: true
-      AWS_SESSION_TOKEN:
-        required: true
       S3_ORIGIN_BUCKET:
         required: true
 
@@ -87,9 +85,6 @@ jobs:
           name: build-artifacts
           path: dist/apps/
 
-      - name: Debug S3 Origin Bucket
-        run: echo "S3_ORIGIN_BUCKET is ${{ secrets.S3_ORIGIN_BUCKET }}"
-
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -109,14 +104,6 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
-      
-      - name: Expose secrets
-        run: | 
-          echo "S3_ORIGIN_BUCKET is ${{ secrets.S3_ORIGIN_BUCKET }}" &&
-          echo "S3_ORIGIN_BUCKET_DEV is ${{ secrets.S3_ORIGIN_BUCKET_DEV }}" &&
-          echo "AWS_ACCESS_KEY_ID is ${{ secrets.AWS_ACCESS_KEY_ID }}" &&
-          echo "AWS_SECRET_ACCESS_KEY is ${{ secrets.AWS_SECRET_ACCESS_KEY }}" &&
-          echo "AWS_DEFAULT_REGION is ${{ secrets.AWS_DEFAULT_REGION }}"
 
       - name: Deploy to S3
         run: |
