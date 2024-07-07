@@ -1,0 +1,27 @@
+name: Build on DEV
+
+on:
+  push:
+    branches:
+      - branch-develop
+  repository_dispatch:
+    types:
+      - build-dev
+  workflow_dispatch:
+
+concurrency:
+  group: environment-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-dev:
+    uses: Obligatorio-DevOps-175577-181513/Frontend/.github/workflows/deploy-to-s3.yml@branch-develop
+    with:
+      CI_ENV: develop
+      CONTENTFUL_ENVIRONMENT: 'develop'
+    secrets:
+      SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+      S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET_DEV }}
