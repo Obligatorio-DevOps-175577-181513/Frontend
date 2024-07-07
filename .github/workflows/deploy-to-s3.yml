@@ -111,4 +111,4 @@ jobs:
           ./.github/scripts/deploy.sh
         shell: bash
         env:
-          S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET_DEV }}
+          S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET }}
