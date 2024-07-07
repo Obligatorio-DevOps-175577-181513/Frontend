@@ -11,6 +11,7 @@ on:
         type: string
       S3_ORIGIN_BUCKET:
         required: true
+        type: string
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true
