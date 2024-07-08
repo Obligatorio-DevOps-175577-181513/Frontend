@@ -1,4 +1,4 @@
-name: Build on DEV
+name: Build on STG
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - branch-staging
   repository_dispatch:
     types:
-      - build-dev
+      - build-stage
   workflow_dispatch:
 
 concurrency:
@@ -14,11 +14,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-dev:
+  build-stage:
     uses: Obligatorio-DevOps-175577-181513/Frontend/.github/workflows/deploy-to-s3.yml@branch-staging
     with:
-      CI_ENV: develop
-      CONTENTFUL_ENVIRONMENT: 'develop'
+      CI_ENV: staging
+      CONTENTFUL_ENVIRONMENT: 'staging'
     secrets:
       SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

@@ -1,4 +1,4 @@
-name: Build on DEV
+name: Build on PROD
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - production
   repository_dispatch:
     types:
-      - build-dev
+      - build-prod
   workflow_dispatch:
 
 concurrency:
@@ -14,11 +14,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-dev:
+  build-prod:
     uses: Obligatorio-DevOps-175577-181513/Frontend/.github/workflows/deploy-to-s3.yml@production
     with:
-      CI_ENV: develop
-      CONTENTFUL_ENVIRONMENT: 'develop'
+      CI_ENV: production
+      CONTENTFUL_ENVIRONMENT: 'production'
     secrets:
       SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
